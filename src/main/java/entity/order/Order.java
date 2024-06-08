@@ -4,11 +4,14 @@ import controller.SessionInformation;
 import entity.cart.Cart;
 import entity.cart.CartItem;
 import entity.shipping.DeliveryInfo;
+import entity.shippingutils.shippingfee.CalculatingFee;
+import entity.shippingutils.shippingfee.CalculatingFeeA;
 import views.screen.ViewsConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import entity.shippingutils.shippingfee;
 
 public class Order {
 
@@ -17,6 +20,7 @@ public class Order {
     private int tax;
     private List orderMediaList;
     protected DeliveryInfo deliveryInfo;
+    private CalculatingFee calculatingFee;
 
     public Order() {
         this.shippingFees = 0;
@@ -53,7 +57,12 @@ public class Order {
 
     public void setDeliveryInfo(DeliveryInfo deliveryInfo) {
         this.deliveryInfo = deliveryInfo;
-        this.shippingFees = deliveryInfo.calculateShippingFee(this);
+        this.calculatingFee = new CalculatingFeeA(deliveryInfo.getAddress(), deliveryInfo.getProvince());
+        this.shippingFees = calculatingFee.calculateShippingFee();
+    }
+
+    public void setCalculatingFee(CalculatingFee calculatingFee) {
+        this.calculatingFee = calculatingFee;
     }
 
     public List getOrderMediaList() {

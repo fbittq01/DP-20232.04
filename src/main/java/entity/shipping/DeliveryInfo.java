@@ -1,3 +1,4 @@
+
 package entity.shipping;
 
 import entity.order.Order;
@@ -19,11 +20,6 @@ public class DeliveryInfo {
         this.address = address;
         this.shippingInstructions = shippingInstructions;
         this.distanceCalculator = distanceCalculator;
-    }
-
-    public int calculateShippingFee(Order order) {
-        int distance = distanceCalculator.calculateDistance(address, province);
-        return (int) (distance * 1.2);
     }
 
     public String getName() {
