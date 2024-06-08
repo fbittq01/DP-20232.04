@@ -1,9 +1,10 @@
 package subsystem.interbank;
 
 import common.exception.*;
-import entity.payment.CreditCard;
+import entity.payment.Card;
 import entity.payment.PaymentTransaction;
 import utils.MyMap;
+import subsystem.converterstrategy.extractingpaymenttransactions.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,7 +23,20 @@ public class InterbankPayloadConverter {
      * @param contents
      * @return
      */
-    String convertToRequestPayload(CreditCard card, int amount, String contents) {
+    private ExtractingPaymentTransaction extractingPaymentTransaction;
+
+    public InterbankPayloadConverter(ExtractingPaymentTransaction extractingPaymentTransaction) {
+        this.extractingPaymentTransaction = extractingPaymentTransaction;
+    }
+
+    public InterbankPayloadConverter() {
+    }
+
+    public void setExtractingPaymentTransaction(ExtractingPaymentTransaction extractingPaymentTransaction) {
+        this.extractingPaymentTransaction = extractingPaymentTransaction;
+    }
+
+    String convertToRequestPayload(Card card, int amount, String contents) {
         Map<String, Object> transaction = new MyMap();
 
         try {
@@ -49,47 +63,7 @@ public class InterbankPayloadConverter {
      * @return
      */
     PaymentTransaction extractPaymentTransaction(String responseText) {
-        MyMap response = convertJSONResponse(responseText);
-
-        if (response == null)
-            return null;
-        MyMap transaction = (MyMap) response.get("transaction");
-        CreditCard card = new CreditCard(
-                (String) transaction.get("cardCode"),
-                (String) transaction.get("owner"),
-                (String) transaction.get("dateExpired"),
-                Integer.parseInt((String) transaction.get("cvvCode")));
-
-        PaymentTransaction trans = new PaymentTransaction(
-                (String) response.get("errorCode"),
-                card,
-                (String) transaction.get("transactionId"),
-                (String) transaction.get("transactionContent"),
-                Integer.parseInt((String) transaction.get("amount")),
-                (String) transaction.get("createdAt"));
-
-        switch (trans.getErrorCode()) {
-            case "00":
-                break;
-            case "01":
-                throw new InvalidCardException();
-            case "02":
-                throw new NotEnoughBalanceException();
-            case "03":
-                throw new InternalServerErrorException();
-            case "04":
-                throw new SuspiciousTransactionException();
-            case "05":
-                throw new NotEnoughTransactionInfoException();
-            case "06":
-                throw new InvalidVersionException();
-            case "07":
-                throw new InvalidTransactionAmountException();
-            default:
-                throw new UnrecognizedException();
-        }
-
-        return trans;
+        extractingPaymentTransaction.extractPaymentTransaction(responseText);
     }
 
     /**
