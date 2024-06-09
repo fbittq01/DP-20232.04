@@ -33,7 +33,7 @@ import utils.Utils;
 import views.screen.BaseScreenHandler;
 import views.screen.ViewsConfig;
 import views.screen.cart.CartScreenHandler;
-import views.screen.popup.PopupScreen;
+import views.screen.popup.*;
 
 
 public class HomeScreenHandler extends BaseScreenHandler implements Observer {
@@ -77,10 +77,10 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
             setupFunctionality();
         } catch (IOException ex) {
             LOGGER.info(ex.getMessage());
-            PopupScreen.error("Error when loading resources.");
+            new ErrorPopupScreen().showPopup("Error when loading resources.");
         } catch (Exception ex) {
             LOGGER.info(ex.getMessage());
-            PopupScreen.error(ex.getMessage());
+            new ErrorPopupScreen().showPopup(ex.getMessage());
         }
     }
 
@@ -144,6 +144,7 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
             btnLogin.setOnMouseClicked(event -> {});
         }
 
+        // Common coupling
         numMediaInCart.setText(String.valueOf(SessionInformation.cartInstance.getListMedia().size()) + " media");
         super.show();
     }
@@ -219,6 +220,7 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
 
         try {
             if (requestQuantity > media.getQuantity()) throw new MediaNotAvailableException();
+            // Common coupling
             Cart cart = SessionInformation.cartInstance;
             // if media already in cart then we will increase the quantity by 1 instead of create the new cartMedia
             CartItem mediaInCart = getBController().checkMediaInCart(media);
@@ -233,12 +235,12 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
             // subtract the quantity and redisplay
             media.setQuantity(media.getQuantity() - requestQuantity);
             numMediaInCart.setText(cart.getTotalMedia() + " media");
-            PopupScreen.success("The media " + media.getTitle() + " added to Cart");
+            new SuccessPopupScreen().showPopup("The media " + media.getTitle() + " added to Cart");
         } catch (MediaNotAvailableException exp) {
             try {
                 String message = "Not enough media:\nRequired: " + requestQuantity + "\nAvail: " + media.getQuantity();
                 LOGGER.severe(message);
-                PopupScreen.error(message);
+                new ErrorPopupScreen().showPopup(message);
             } catch (Exception e) {
                 LOGGER.severe("Cannot add media to cart: ");
             }
@@ -258,7 +260,7 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
             loginScreen.show();
         } catch (Exception ex) {
             try {
-                PopupScreen.error("Cant trigger Login");
+                new ErrorPopupScreen().showPopup("Cant trigger Login");
             } catch (Exception ex1) {
                 LOGGER.severe("Cannot login");
                 ex.printStackTrace();
