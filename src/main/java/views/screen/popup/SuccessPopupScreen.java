@@ -28,6 +28,6 @@ public class SuccessPopupScreen extends PopupScreen {
         successPopupScreen.message.setText(message);
         successPopupScreen.setImage(ViewsConfig.IMAGE_PATH + "/" + TICKGREEN);
         successPopupScreen.show();
-        successPopupScreen.close(0.8);
+        successPopupScreen.close(closeTime);
     }
 }
