@@ -25,6 +25,8 @@ public class BaseController {
      * This method gets the list of items in cart
      * @return List[CartMedia]
      */
+
+    // common coupling
     public List getListCartMedia(){
         return SessionInformation.cartInstance.getListMedia();
     }

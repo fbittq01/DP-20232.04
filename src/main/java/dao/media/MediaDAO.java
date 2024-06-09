@@ -1,5 +1,6 @@
 package dao.media;
 
+import dao.media.factory.MediaFactory;
 import entity.db.AIMSDB;
 import entity.media.Media;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class MediaDAO {
 
-    public List getAllMedia() throws SQLException {
+    public List getAllMedia() throws SQLException, ClassNotFoundException {
         Statement stm = AIMSDB.getConnection().createStatement();
         ResultSet res = stm.executeQuery("select * from Media");
         ArrayList medium = new ArrayList<>();
@@ -27,6 +28,11 @@ public class MediaDAO {
                     res.getString("imageUrl"),
                     res.getInt("price"),
                     res.getString("type"));
+
+            String mediaType = media.getType();
+            Class mClass = Class.forName("dao.media.factory." + mediaType + "Factory");
+            MediaFactory mediaFactory = MediaFactory.newInstance();
+            media = mediaFactory.create(media);
             medium.add(media);
         }
         return medium;
