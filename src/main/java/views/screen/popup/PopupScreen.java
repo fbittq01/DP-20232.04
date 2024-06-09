@@ -12,7 +12,6 @@ import views.screen.ViewsConfig;
 
 import java.io.IOException;
 
-
 public class PopupScreen extends BaseScreenHandler {
 
     @FXML
@@ -20,8 +19,9 @@ public class PopupScreen extends BaseScreenHandler {
 
     @FXML
     Label message;
+    public static final float closeTime = 0.8f;
 
-    public PopupScreen(Stage stage) throws IOException{
+    public PopupScreen(Stage stage) throws IOException {
         super(stage, ViewsConfig.POPUP_PATH);
     }
 
@@ -31,7 +31,8 @@ public class PopupScreen extends BaseScreenHandler {
 
     public void show(Boolean autoClose) {
         super.show();
-        if (autoClose) close(0.8);
+        if (autoClose)
+            close(closeTime);
     }
 
     public void show(double time) {
@@ -41,7 +42,7 @@ public class PopupScreen extends BaseScreenHandler {
 
     public void close(double time) {
         PauseTransition delay = new PauseTransition(Duration.seconds(time));
-        delay.setOnFinished( event -> stage.close() );
+        delay.setOnFinished(event -> stage.close());
         delay.play();
     }
 

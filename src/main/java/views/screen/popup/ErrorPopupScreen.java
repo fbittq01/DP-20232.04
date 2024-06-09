@@ -12,7 +12,6 @@ import views.screen.ViewsConfig;
 
 import java.io.IOException;
 
-
 public class ErrorPopupScreen extends PopupScreen {
 
     @FXML
@@ -20,14 +19,16 @@ public class ErrorPopupScreen extends PopupScreen {
 
     @FXML
     Label message;
-    public ErrorPopupScreen(Stage stage) throws IOException{
+    public static final String TICKERROR = "tickerror.png";
+
+    public ErrorPopupScreen(Stage stage) throws IOException {
         super(stage, ViewsConfig.POPUP_PATH);
     }
 
     public static showPopup(String message) throws IOException {
         ErrorPopupScreen errorPopup = new ErrorPopupScreen(new Stage());
         errorPopup.message.setText(message);
-        errorPopup.setImage(ViewsConfig.IMAGE_PATH + "/" + "tickerror.png");
+        errorPopup.setImage(ViewsConfig.IMAGE_PATH + "/" + TICKERROR);
         errorPopup.show();
     }
 }
