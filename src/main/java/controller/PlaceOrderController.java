@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * @author nguyenlm
  */
 public class PlaceOrderController extends BaseController {
-
+    SessionInformation sessionInformation = SessionInformation.getInstance();
     /**
      * Just for logging purpose
      */
@@ -34,7 +34,7 @@ public class PlaceOrderController extends BaseController {
      */
     public void placeOrder() throws SQLException {
         // Common coupling
-        SessionInformation.cartInstance.checkAvailabilityOfProduct();
+        sessionInformation.getCartInstance().checkAvailabilityOfProduct();
     }
 
     /**
@@ -44,7 +44,7 @@ public class PlaceOrderController extends BaseController {
      */
     public Order createOrder() throws SQLException {
         // Common coupling
-        return new Order(SessionInformation.cartInstance);
+        return new Order(sessionInformation.getCartInstance());
     }
 
     /**
@@ -76,21 +76,22 @@ public class PlaceOrderController extends BaseController {
         System.out.println(deliveryInfo.getProvince());
         return deliveryInfo;
     }
-    
+
     /**
-   * The method validates the info
-   * @param info
-   * @throws InterruptedException
-   * @throws IOException
-   */
+     * The method validates the info
+     * @param info
+     * @throws InterruptedException
+     * @throws IOException
+     */
+
     // Stamp coupling: info
     public void validateDeliveryInfo(HashMap<String, String> info) throws InterruptedException, IOException, InvalidDeliveryInfoException {
         if (validatePhoneNumber(info.get("phone"))
-        || validateName(info.get("name"))
-        || validateAddress(info.get("address"))) return;
+                || validateName(info.get("name"))
+                || validateAddress(info.get("address"))) return;
         else throw new InvalidDeliveryInfoException();
     }
-    
+
     public boolean validatePhoneNumber(String phoneNumber) {
         if (phoneNumber.length() != 10) return false;
         if (!phoneNumber.startsWith("0")) return false;
@@ -101,7 +102,7 @@ public class PlaceOrderController extends BaseController {
         }
         return true;
     }
-    
+
     public boolean validateName(String name) {
         if (Objects.isNull(name)) return false;
         String patternString = "^[a-zA-Z\\s]*$";
@@ -109,7 +110,7 @@ public class PlaceOrderController extends BaseController {
         Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
-    
+
     public boolean validateAddress(String address) {
         if (Objects.isNull(address)) return false;
         String patternString = "^[a-zA-Z\\s]*$";

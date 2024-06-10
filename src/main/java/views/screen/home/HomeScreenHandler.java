@@ -37,6 +37,7 @@ import views.screen.popup.*;
 
 
 public class HomeScreenHandler extends BaseScreenHandler implements Observer {
+    SessionInformation sessionInformation = SessionInformation.getInstance();
 
     public static Logger LOGGER = Utils.getLogger(HomeScreenHandler.class.getName());
 
@@ -145,7 +146,7 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
         }
 
         // Common coupling
-        numMediaInCart.setText(String.valueOf(SessionInformation.cartInstance.getListMedia().size()) + " media");
+        numMediaInCart.setText(String.valueOf(sessionInformation.getCartInstance().getListMedia().size()) + " media");
         super.show();
     }
 
@@ -221,7 +222,7 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
         try {
             if (requestQuantity > media.getQuantity()) throw new MediaNotAvailableException();
             // Common coupling
-            Cart cart = SessionInformation.cartInstance;
+            Cart cart = sessionInformation.getCartInstance();
             // if media already in cart then we will increase the quantity by 1 instead of create the new cartMedia
             CartItem mediaInCart = getBController().checkMediaInCart(media);
             if (mediaInCart != null) {
@@ -267,4 +268,5 @@ public class HomeScreenHandler extends BaseScreenHandler implements Observer {
             }
         }
     }
+
 }

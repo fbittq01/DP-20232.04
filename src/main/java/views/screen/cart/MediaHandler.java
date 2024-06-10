@@ -26,6 +26,7 @@ import views.screen.FXMLScreenHandler;
 import views.screen.ViewsConfig;
 
 public class MediaHandler extends FXMLScreenHandler {
+	SessionInformation sessionInformation = SessionInformation.getInstance();
 
 	private static Logger LOGGER = Utils.getLogger(MediaHandler.class.getName());
 
@@ -85,7 +86,7 @@ public class MediaHandler extends FXMLScreenHandler {
 		btnDelete.setFont(ViewsConfig.REGULAR_FONT);
 		btnDelete.setOnMouseClicked(e -> {
 			try {
-				SessionInformation.cartInstance.removeCartMedia(cartItem); // update user cart
+				sessionInformation.getCartInstance().removeCartMedia(cartItem); // update user cart
 				cartScreen.updateCart(); // re-display user cart
 				LOGGER.info("Deleted " + cartItem.getMedia().getTitle() + " from the cart");
 			} catch (SQLException exp) {
@@ -96,18 +97,17 @@ public class MediaHandler extends FXMLScreenHandler {
 		initializeSpinner();
 	}
 
-	private void initializeSpinner() {
+	private void initializeSpinner(){
 		SpinnerValueFactory<Integer> valueFactory = //
 				new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, cartItem.getQuantity());
 		spinner = new Spinner<Integer>(valueFactory);
-		spinner.setOnMouseClicked(e -> {
+		spinner.setOnMouseClicked( e -> {
 			try {
 				int numOfProd = this.spinner.getValue();
 				int remainQuantity = cartItem.getMedia().getQuantity();
 				LOGGER.info("NumOfProd: " + numOfProd + " -- remainOfProd: " + remainQuantity);
-				if (numOfProd > remainQuantity) {
-					LOGGER.info("product " + cartItem.getMedia().getTitle() + " only remains " + remainQuantity
-							+ " (required " + numOfProd + ")");
+				if (numOfProd > remainQuantity){
+					LOGGER.info("product " + cartItem.getMedia().getTitle() + " only remains " + remainQuantity + " (required " + numOfProd + ")");
 					labelOutOfStock.setText("Sorry, Only " + remainQuantity + " remain in stock");
 					spinner.getValueFactory().setValue(remainQuantity);
 					numOfProd = remainQuantity;
@@ -117,7 +117,7 @@ public class MediaHandler extends FXMLScreenHandler {
 				cartItem.setQuantity(numOfProd);
 
 				// update the total of mediaCart
-				price.setText(ViewsConfig.getCurrencyFormat(numOfProd * cartItem.getPrice()));
+				price.setText(ViewsConfig.getCurrencyFormat(numOfProd* cartItem.getPrice()));
 
 				// update subtotal and amount of Cart
 				cartScreen.updateCartAmount();
