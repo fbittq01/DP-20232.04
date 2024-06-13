@@ -4,6 +4,7 @@ import dao.media.type;
 import entity.db.AIMSDB;
 import entity.media.Book;
 import entity.media.Media;
+import entity.media.type.MediaType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

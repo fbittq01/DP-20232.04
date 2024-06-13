@@ -4,14 +4,15 @@ import dao.media.type;
 import entity.db.AIMSDB;
 import entity.media.DVD;
 import entity.media.Media;
+import entity.media.type.MediaType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
-public class DVDFactory extends MediaFactory {
-    public DVDFactory() {
+public class DVDDAO extends MediaFactory {
+    public DVDDAO() {
     }
 
     @Override

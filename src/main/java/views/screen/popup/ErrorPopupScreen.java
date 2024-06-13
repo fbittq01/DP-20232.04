@@ -25,7 +25,7 @@ public class ErrorPopupScreen extends PopupScreen {
         super(stage, ViewsConfig.POPUP_PATH);
     }
 
-    public static showPopup(String message) throws IOException {
+    public static void showPopup(String message) throws IOException {
         ErrorPopupScreen errorPopup = new ErrorPopupScreen(new Stage());
         errorPopup.message.setText(message);
         errorPopup.setImage(ViewsConfig.IMAGE_PATH + "/" + TICKERROR);

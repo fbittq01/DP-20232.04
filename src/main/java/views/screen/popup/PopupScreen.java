@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import views.screen.BaseScreenHandler;
 import views.screen.ViewsConfig;
@@ -21,7 +20,7 @@ public class PopupScreen extends BaseScreenHandler {
     Label message;
     public static final float closeTime = 0.8f;
 
-    public PopupScreen(Stage stage) throws IOException {
+    public PopupScreen(Stage stage, String popupPath) throws IOException {
         super(stage, ViewsConfig.POPUP_PATH);
     }
 
@@ -29,13 +28,13 @@ public class PopupScreen extends BaseScreenHandler {
         super.setImage(icon, path);
     }
 
-    public void show(Boolean autoClose) {
+    public void showPopup(Boolean autoClose) {
         super.show();
         if (autoClose)
             close(closeTime);
     }
 
-    public void show(double time) {
+    public void showPopup(double time) {
         super.show();
         close(time);
     }
